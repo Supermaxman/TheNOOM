@@ -1,0 +1,7 @@
+name: TheNoom
+main: me.supermaxman.TheNoom.TheNoom
+version: 1.0.0
+author: Supermaxman
+description: Custom world generator to generateTheNoom. y==0 is bedrock layer=height,block[:datavalue] generator id=layer[,layer[,...]] - Prefix . at the start of the ID to skip bedrock generation at layer0
+load: startup
+
