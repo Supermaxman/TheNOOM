@@ -116,7 +116,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                 }
             }
         }
-
+        
         int startY = snapshot.getHighestBlockYAt(startX, startZ);
         
         int startYN = startY + 1;
