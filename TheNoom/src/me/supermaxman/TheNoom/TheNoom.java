@@ -1,16 +1,25 @@
 package me.supermaxman.TheNoom;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.generator.ChunkGenerator;
@@ -23,12 +32,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class TheNoom extends JavaPlugin implements Listener
 {
     private Logger log = Logger.getLogger("Minecraft");
     PluginDescriptionFile pluginDescriptionFile;
+	public static int BrokenCrystals = 0;
+
     
     public void onEnable()
     {
@@ -75,7 +88,7 @@ public class TheNoom extends JavaPlugin implements Listener
 		Entity e = event.getEntity();
 			if (e.getWorld().getName().equalsIgnoreCase("world_thenoom")){
 				if (e instanceof PigZombie){
-					if ((new Random().nextInt(3) < 1)) {
+					if ((new Random().nextInt(3) < 2)) {
 					event.setCancelled(true);
 					}
 				}
@@ -94,4 +107,53 @@ public class TheNoom extends JavaPlugin implements Listener
 			}
 		}
 	}	
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityDeath(EntityExplodeEvent event){
+		Entity e = event.getEntity();
+			if (e instanceof EnderCrystal){
+			if (e.getWorld().getName().equalsIgnoreCase("world_thenoom")){
+				BrokenCrystals++;
+				if (BrokenCrystals == 1){
+					e.getServer().broadcastMessage(ChatColor.DARK_RED+""+BrokenCrystals+ChatColor.DARK_AQUA+" Ender Crystal Has Been Destroyed!");
+				}else{
+					e.getServer().broadcastMessage(ChatColor.DARK_RED+""+BrokenCrystals+ChatColor.DARK_AQUA+" Ender Crystals Have Been Destroyed!");
+				}
+				if (BrokenCrystals == 5){
+					e.getServer().broadcastMessage(ChatColor.DARK_RED+"The Noom Feels Restless. . .");
+				}else if (BrokenCrystals == 9){
+					e.getServer().broadcastMessage(ChatColor.DARK_RED+"The Noom Begins To Tremble. . .");
+				}else if(BrokenCrystals == 10){
+					BrokenCrystals = 0;
+					e.getServer().broadcastMessage(ChatColor.DARK_RED+"The Noom Has Awakened!");
+					e.getServer().getWorld("world_thenoom").spawn(e.getLocation(), EnderDragon.class);
+				}
+		}
+	}
+	}
+    
+    @EventHandler
+	public void onBlockPlace(BlockPlaceEvent event){
+		Player p = event.getPlayer();
+		if ((p.getWorld().getName().equalsIgnoreCase("world_thenoom"))&&(event.isCancelled()==false)){
+			for (Entity e : p.getNearbyEntities(50, 20, 50)){
+				if (e instanceof PigZombie){
+					((PigZombie) e).damage(0, p);
+				}
+			}
+		}
+	}
+    @EventHandler
+	public void onBlockBreak(BlockBreakEvent event){
+		Player p = event.getPlayer();
+		if ((p.getWorld().getName().equalsIgnoreCase("world_thenoom"))&&(event.isCancelled()==false)){
+			for (Entity e : p.getNearbyEntities(50, 20, 50)){
+				if (e instanceof PigZombie){
+					((PigZombie) e).damage(0, p);
+				}
+			}
+		}
+	}
 }
+

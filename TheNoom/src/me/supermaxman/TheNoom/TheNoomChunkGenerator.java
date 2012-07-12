@@ -37,8 +37,7 @@ public class TheNoomChunkGenerator extends ChunkGenerator
     	layer[4] = (short)Material.OBSIDIAN.getId();
     	Arrays.fill(layer, 5, 64, (short)Material.NETHERRACK.getId());
     	layer[64] = (short)Material.BEDROCK.getId();
-    	Arrays.fill(layer, 65, 66, (short)Material.SANDSTONE.getId());
-
+    	
     	//layer[255] =  (short)Material.BEDROCK.getId();
 
     	
