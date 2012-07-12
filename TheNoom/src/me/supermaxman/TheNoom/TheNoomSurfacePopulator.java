@@ -18,6 +18,7 @@ import java.util.Random;
 public class TheNoomSurfacePopulator extends BlockPopulator {
     public int CRATER_CHANCE = 2;
     public int HILL_CHANCE = 60;
+    public int TOWER_CHANCE = 2;
     public int GLOWSTONE_CHANCE = 10000;
     public int ENDSTONE_CHANCE = 30000;
     public int FORTRESS_CHANCE = 2;
@@ -123,7 +124,6 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             createFortress(source, height, this.BRICK);
         }
 
-        //if((source.getBlock(1, 67, 1).getTypeId()==0)&&(source.getBlock(16, 67, 16).getTypeId()==0)&&(source.getBlock(1, 67, 16).getTypeId()==0)&&(source.getBlock(16, 67, 1).getTypeId()==0)){
         if ((random.nextInt(200) < this.CRATER_CHANCE)) {
         	
             int height = startYN - 2;
@@ -133,9 +133,14 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                 createFortress(source, 54, this.BEDROCK);
             }
         }
-        //}
-
-
+        if ((random.nextInt(200) < this.TOWER_CHANCE)) {
+        	int roomsLeft =  random.nextInt(5)+2;
+        	int size = 10;
+            int height = startYN;
+        	createTower(source, height, size, roomsLeft ,this.BEDROCK);
+        	
+        }
+        
         for (int y = 250; y <= 250; y++) {
             for (int x = 1; x <= 16; x++) {
                 for (int z = 1; z <= 16; z++) {
@@ -253,5 +258,57 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
         }
     }
 
+    
+    public void createTower(Chunk source, int height, int size, int roomsLeft, Material mat){
+        for (int y = height; y <= height + (size^roomsLeft); y++) {
+            for (int x = 1; x <= 15; x++) {
+                for (int z = 1; z <= 15; z++) {
+                	
+                    if ((y == height) || (y == height + size)) {
+                    	
+                            source.getBlock(x, y, z).setType(mat);
+                            
+                    } else if ((y == height + 1) && (x == 8) && (z == 8)) {
+                        Block b = source.getBlock(x, y, z);
+                        //make type random
+                        b.setType(this.SPAWNER);
+                        CreatureSpawner spawner = (CreatureSpawner) b.getState();
+                        spawner.setSpawnedType(EntityType.BLAZE); 
+                        
+                    } else {              	
+                        if ((z == 1) || (z == 15) || (x == 1) || (x == 15)) {
+                            source.getBlock(x, y, z).setType(mat);
+                        } else if ((z == 2) || (z == 14) || (x == 2) || (x == 14)) {
+                            source.getBlock(x, y, z).setType(Material.OBSIDIAN);
+                        }else{
+                            source.getBlock(x, y, z).setType(this.AIR);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
+
+
+
+

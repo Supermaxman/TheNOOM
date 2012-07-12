@@ -1,8 +1,8 @@
-
 package me.supermaxman.TheNoom;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Inventory;
@@ -22,12 +23,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.logging.Logger;
+import java.util.Random;
 
 public class TheNoom extends JavaPlugin implements Listener
 {
     private Logger log = Logger.getLogger("Minecraft");
     PluginDescriptionFile pluginDescriptionFile;
-
+    
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents(new TheNoom(), this);
@@ -35,8 +37,7 @@ public class TheNoom extends JavaPlugin implements Listener
         log.info("[TheNoom] " + pluginDescriptionFile.getFullName() + " enabled");
     }
 
-    public void onDisable()
-    {
+    public void onDisable(){
     }
 
     @Override
@@ -44,7 +45,8 @@ public class TheNoom extends JavaPlugin implements Listener
     {
         return new TheNoomChunkGenerator(id);
     }
-    @EventHandler
+    
+    @EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent event){
 		Player player = event.getPlayer();
 		Inventory inventory = player.getInventory();
@@ -57,7 +59,8 @@ public class TheNoom extends JavaPlugin implements Listener
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	
+    @EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamage(EntityDamageEvent event){
 		Entity e = event.getEntity();
 			if (event.getCause()==DamageCause.FALL){
@@ -71,8 +74,24 @@ public class TheNoom extends JavaPlugin implements Listener
 	public void onCreatureSpawn(CreatureSpawnEvent event){
 		Entity e = event.getEntity();
 			if (e.getWorld().getName().equalsIgnoreCase("world_thenoom")){
-				event.setCancelled(true);
+				if (e instanceof PigZombie){
+					if ((new Random().nextInt(3) < 1)) {
+					event.setCancelled(true);
+					}
+				}
+				
 			}
 	}
-		
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityPortalEnter(EntityPortalEnterEvent event){
+		Entity e = event.getEntity();
+		if (e instanceof Player){
+			if (e.getWorld().getName().equalsIgnoreCase("world_thenoom")){
+				e.teleport(e.getServer().getWorld("world").getBlockAt(e.getLocation().getBlockX(), e.getServer().getWorld("world").getSeaLevel(), e.getLocation().getBlockZ()).getLocation());
+			}else if (e.getWorld().getName().equalsIgnoreCase("world")){
+				e.teleport(e.getServer().getWorld("world_thenoom").getBlockAt(e.getLocation().getBlockX(), 70, e.getLocation().getBlockZ()).getLocation());
+			}
+		}
+	}	
 }
