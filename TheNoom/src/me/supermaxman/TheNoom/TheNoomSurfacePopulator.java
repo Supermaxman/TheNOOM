@@ -18,11 +18,11 @@ import java.util.Random;
 
 public class TheNoomSurfacePopulator extends BlockPopulator {
     public int CRATER_CHANCE = 2;
-    public int HILL_CHANCE = 60;
     public int TOWER_CHANCE = 2;
+    public int FORTRESS_CHANCE = 2;
+    public int HILL_CHANCE = 60;
     public int GLOWSTONE_CHANCE = 10000;
     public int ENDSTONE_CHANCE = 30000;
-    public int FORTRESS_CHANCE = 2;
     public int ROOM_HEIGHT = 10;
     public Material STONE = Material.NETHERRACK;
     public Material AIR = Material.AIR;
@@ -43,6 +43,23 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
 
     public BlockFace[] directions = {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
+    };
+    public ItemStack[] items = {
+            new ItemStack(Material.GOLDEN_APPLE),
+            new ItemStack(Material.APPLE),
+            new ItemStack(Material.BOW),
+            new ItemStack(Material.IRON_SWORD),
+            new ItemStack(Material.GOLD_HELMET),
+            new ItemStack(Material.BREAD, 3),
+            new ItemStack(Material.BREAD, 2),
+            new ItemStack(Material.BREAD, 6),
+            new ItemStack(Material.DIAMOND, 1),
+            new ItemStack(Material.NETHER_WARTS,2),
+            new ItemStack(Material.NETHER_WARTS, 3),
+            new ItemStack(Material.NETHER_WARTS, 9),
+            new ItemStack(Material.NETHER_WARTS, 4),
+            new ItemStack(Material.NETHER_WARTS, 6),
+            new ItemStack(Material.NETHER_WARTS, 1)
     };
 
     public void populate(World world, Random random, Chunk source) {
@@ -122,7 +139,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
         int startYN = startY + 1;
         if ((random.nextInt(200) < this.FORTRESS_CHANCE)) {
             int height = (random.nextInt(30) + 10);
-            createFortress(source, height, this.BRICK);
+            createFortress(source, height, this.BRICK, random);
         }
 
         if ((random.nextInt(200) < this.CRATER_CHANCE)) {
@@ -131,11 +148,11 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
 
             createCrater(source, height, startYN);
             if ((random.nextInt(10) < 2)) {
-                createFortress(source, 54, this.BEDROCK);
+                createFortress(source, 54, this.BEDROCK, random);
             }
         }
-        if ((random.nextInt(200) < this.TOWER_CHANCE)) {
-            int roomsLeft = random.nextInt(5) + 6;
+        if ((random.nextInt(400)  < this.TOWER_CHANCE)) {
+            int roomsLeft = random.nextInt(6) + 4;
             int size = 10;
             int height = startYN;
             createTower(source, height, size, roomsLeft, this.OBSIDIAN, random);
@@ -146,7 +163,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             for (int x = 1; x <= 16; x++) {
                 for (int z = 1; z <= 16; z++) {
                     source.getBlock(x, y, z).setType(this.BEDROCK);
-
+                    
                 }
             }
         }
@@ -154,7 +171,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
 
     public void createCrater(Chunk source, int height, int startYN) {
 
-        for (int y = height; y <= startYN + 10; y++) {
+        for (int y = height; y <= startYN + 20; y++) {
             for (int x = 2; x <= 14; x++) {
                 for (int z = 2; z <= 14; z++) {
                     if (y == startYN + 1) {
@@ -165,7 +182,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                             } else {
 
                                 source.getBlock(x, y, z).setType(this.CMATERIAL);
-
+                                
                             }
                         } else if ((z == 3) || (z == 13) || (x == 3) || (x == 13)) {
                             if (((z == 3) && (x == 3)) || ((z == 13) && (x == 13)) || ((z == 3) && (x == 13)) || ((z == 13) && (x == 3))) {
@@ -218,7 +235,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     }
 
 
-    public void createFortress(Chunk source, int height, Material mat) {
+    public void createFortress(Chunk source, int height, Material mat, Random random) {
         for (int y = height; y <= height + this.ROOM_HEIGHT; y++) {
             for (int x = 1; x <= 15; x++) {
                 for (int z = 1; z <= 15; z++) {
@@ -232,8 +249,11 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                     } else if ((mat != Material.BEDROCK) && (y == height + 1) && (x == 8) && (z == 8)) {
                         Block b = source.getBlock(x, y, z);
                         b.setType(this.CHEST);
-                        ((Chest) b.getState()).getBlockInventory().setItem(1, new ItemStack(Material.GOLDEN_APPLE, 1));
-
+                        ((Chest) b.getState()).getBlockInventory().setItem(((Chest) b.getState()).getBlockInventory().firstEmpty(), items[random.nextInt(14)]);
+                        while(random.nextInt(4)>1){
+                        ((Chest) b.getState()).getBlockInventory().setItem(((Chest) b.getState()).getBlockInventory().firstEmpty(), items[random.nextInt(14)]);
+                        }
+                        
                     } else if ((y == height + 2) && (x == 8) && (z == 8)) {
                         Block b = source.getBlock(x, y, z);
                         b.setType(this.SPAWNER);
@@ -242,11 +262,8 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                     } else if ((mat != Material.BEDROCK) && (y == height + 1) && (x != 8) && (z != 8) && (z != 15) && (z != 1) && (x != 15) && (x != 1)) {
                         Block b = source.getBlock(x, y, z);
                         b.setType(this.SSAND);
-                    } else if ((mat != Material.BEDROCK) && (y == height + 2) && (x != 8) && (z != 8) && (z != 15) && (z != 1) && (x != 15) && (x != 1)) {
-                        Block b = source.getBlock(x, y, z);
-                        b.setType(this.NWARTS);
                     } else {
-
+                    	
                         if ((z == 1) || (z == 15) || (x == 1) || (x == 15)) {
                             source.getBlock(x, y, z).setType(mat);
                         } else {
@@ -304,8 +321,9 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                             b.setType(this.AIR);
                         }else if(roomsLeft == tfloor){
                         	//add crystal
-                            b.setType(this.AIR);
+                            b.setType(this.BEDROCK);
                             b.getWorld().spawn(b.getLocation(), EnderCrystal.class);
+                            
                         }else{
                             b.setType(this.SPAWNER);
                             CreatureSpawner spawner = (CreatureSpawner) b.getState();
@@ -393,8 +411,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
         height = height + size;
     }
     }
-
-
+    
     
     
     
