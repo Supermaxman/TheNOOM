@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,13 +23,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -37,7 +34,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.logging.Logger;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class TheNoom extends JavaPlugin implements Listener
@@ -70,8 +66,6 @@ public class TheNoom extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent event){
 		Player player = event.getPlayer();
-		Inventory inventory = player.getInventory();
-		ItemStack i = ((PlayerInventory) inventory).getBoots();
 		if (player.getWorld().getName().equalsIgnoreCase(world)){
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 5));
 			if ((player.getInventory().getHelmet()==null)||(player.getInventory().getHelmet().getType()!=Material.GOLD_HELMET)){
@@ -217,7 +211,10 @@ public class TheNoom extends JavaPlugin implements Listener
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
-                        					p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, p.getServer().getWorld(world).getSeaLevel()+2, p.getLocation().getBlockZ()^4).getLocation());
+                        					
+                								
+                								
+                								p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation());
                 							}
                 						}
                 					}, 80);
@@ -283,7 +280,7 @@ public class TheNoom extends JavaPlugin implements Listener
     	}
     	}else if (event.getAction() == Action.LEFT_CLICK_BLOCK){
     		if ((event.getClickedBlock().getType()==Material.DRAGON_EGG)&&(event.getClickedBlock().getLocation().getWorld().getName().equalsIgnoreCase(world))){
-    			if(p.getInventory().firstEmpty()<=36){
+    			if((p.getInventory().firstEmpty()<=36)&&(p.getInventory().firstEmpty()>=0)){
         		event.setCancelled(true);
     			p.getInventory().setItem(p.getInventory().firstEmpty(), new ItemStack(Material.DRAGON_EGG,1));
     			event.getClickedBlock().setTypeId(0);
@@ -293,6 +290,21 @@ public class TheNoom extends JavaPlugin implements Listener
     		
     	
     }
+    
+    public int heighestBlockAtIgnoreRoof(World w, int x, int z) {
+    	w.getChunkAt(z, z);
+    	int i = w.getSeaLevel()+2;
+    	while(i<250){
+    		if(w.getBlockAt(x, i, z).getTypeId()==0){
+    			break;
+    		}
+    		i++;
+    	}
+    	
+    	
+    	return i;
+	}
+    
     
     
 }

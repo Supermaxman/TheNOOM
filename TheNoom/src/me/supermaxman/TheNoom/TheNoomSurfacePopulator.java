@@ -159,7 +159,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             
         }
 
-        for (int y = 250; y <= 250; y++) {
+        for (int y = 255; y <= 255; y++) {
             for (int x = 1; x <= 16; x++) {
                 for (int z = 1; z <= 16; z++) {
                     source.getBlock(x, y, z).setType(this.BEDROCK);

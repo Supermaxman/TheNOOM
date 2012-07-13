@@ -1,7 +1,6 @@
 
 package me.supermaxman.TheNoom;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -14,7 +13,6 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
 import static java.lang.System.arraycopy;
-import static java.lang.System.inheritedChannel;
 
 public class TheNoomChunkGenerator extends ChunkGenerator
 {
