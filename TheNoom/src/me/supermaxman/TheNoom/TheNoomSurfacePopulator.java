@@ -261,7 +261,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                         spawner.setSpawnedType(EntityType.BLAZE);
                     } else if ((mat != Material.BEDROCK) && (y == height + 1) && (x != 8) && (z != 8) && (z != 15) && (z != 1) && (x != 15) && (x != 1)) {
                         Block b = source.getBlock(x, y, z);
-                        b.setType(this.SSAND);
+                        b.setType(this.AIR);
                     } else {
                     	
                         if ((z == 1) || (z == 15) || (x == 1) || (x == 15)) {

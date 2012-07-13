@@ -105,10 +105,16 @@ public class TheNoom extends JavaPlugin implements Listener
 	}
 	
 	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event) {
+	public void onEntityDeath(final EntityDeathEvent event) {
 		if(event.getEntity() instanceof EnderDragon){
-			event.getEntity().remove();
-			System.out.println(1);
+				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+				public void run() {	
+					Location loc = event.getEntity().getLocation();
+					event.getEntity().remove();
+					event.setDroppedExp(50);
+					loc.getBlock().setType(Material.DRAGON_EGG);
+				}
+			}, 60);
 		}
 	}
 
@@ -117,6 +123,7 @@ public class TheNoom extends JavaPlugin implements Listener
 		Entity e = event.getEntity();
 			if (e instanceof EnderCrystal){
 			if (e.getWorld().getName().equalsIgnoreCase(world)){
+				
 				for(Entity ent : e.getNearbyEntities(10, 10, 10)){
 					if (ent instanceof Player){
 						Player p = (Player) ent;
@@ -172,7 +179,7 @@ public class TheNoom extends JavaPlugin implements Listener
 		}
 	}
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event){
     	final Player p = event.getPlayer();
     	if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -271,16 +278,21 @@ public class TheNoom extends JavaPlugin implements Listener
             			}
     			
             		
+    	}else if(event.getClickedBlock().getType()==Material.DRAGON_EGG){
+    		event.setCancelled(true);
     	}
+    	}else if (event.getAction() == Action.LEFT_CLICK_BLOCK){
+    		if ((event.getClickedBlock().getType()==Material.DRAGON_EGG)&&(event.getClickedBlock().getLocation().getWorld().getName().equalsIgnoreCase(world))){
+    			if(p.getInventory().firstEmpty()<=36){
+        		event.setCancelled(true);
+    			p.getInventory().setItem(p.getInventory().firstEmpty(), new ItemStack(Material.DRAGON_EGG,1));
+    			event.getClickedBlock().setTypeId(0);
+    			}
+    		}
     	}
+    		
     	
     }
-
-
-
-
+    
+    
 }
-
-
-
-
