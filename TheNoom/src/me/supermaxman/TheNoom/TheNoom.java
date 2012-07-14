@@ -144,8 +144,6 @@ public class TheNoom extends JavaPlugin implements Listener
 				}
 
 		}
-	}else if(e instanceof EnderDragon){
-		event.setCancelled(true);
 	}
 	}
     

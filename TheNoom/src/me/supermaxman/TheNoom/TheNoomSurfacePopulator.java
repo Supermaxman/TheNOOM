@@ -138,6 +138,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
         
         int startYN = startY + 1;
         if ((random.nextInt(200) < this.FORTRESS_CHANCE)) {
+        	//31 = perfect base height
             int height = (random.nextInt(30) + 10);
             createFortress(source, height, this.BRICK, random);
         }
