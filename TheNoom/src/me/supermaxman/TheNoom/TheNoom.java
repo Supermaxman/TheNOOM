@@ -153,7 +153,7 @@ public class TheNoom extends JavaPlugin implements Listener
 		if ((p.getWorld().getName().equalsIgnoreCase(world))&&(event.isCancelled()==false)){
 			for (Entity e : p.getNearbyEntities(10, 20, 10)){
 				if (e instanceof PigZombie){
-					((PigZombie) e).damage(0, p);
+					((PigZombie) e).setAngry(true);
 				}
 			}
 		}
@@ -165,7 +165,7 @@ public class TheNoom extends JavaPlugin implements Listener
 		if ((p.getWorld().getName().equalsIgnoreCase(world))&&(event.isCancelled()==false)){
 			for (Entity e : p.getNearbyEntities(10, 20, 10)){
 				if (e instanceof PigZombie){
-					((PigZombie) e).damage(0, p);
+					((PigZombie) e).setAngry(true);
 				}
 			}
 		}
