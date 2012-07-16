@@ -10,14 +10,11 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class TheNoomSurfacePopulator extends BlockPopulator {
@@ -28,9 +25,10 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     public int GLOWSTONE_CHANCE = 10000;
     public int ENDSTONE_CHANCE = 30000;
     public int ROOM_HEIGHT = 10;
-    public int D_HEIGHT = 24;
-    public int T_CHANCE = 15;
-    public int S_CHANCE = 10;
+    public int D_HEIGHT = 41;
+    public int T_CHANCE = 10;
+    public int S_CHANCE = 5;
+    public int CLEAR_CACHE = 1000;
 
     public Material STONE = Material.NETHERRACK;
     public Material AIR = Material.AIR;
@@ -40,11 +38,13 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     public Material SANDSTONE = Material.SANDSTONE;
     public Material BEDROCK = Material.BEDROCK;
     public Material BRICK = Material.NETHER_BRICK;
+    public Material STAIRS = Material.NETHER_BRICK_STAIRS;
     public Material SPAWNER = Material.MOB_SPAWNER;
     public Material CHEST = Material.CHEST;
     public Material NWARTS = Material.NETHER_WARTS;
     public Material OBSIDIAN = Material.OBSIDIAN;
     public Material FENCE = Material.NETHER_FENCE;
+    public Material LAVA = Material.LAVA;
     public Material CMATERIAL = SSAND;
     public Material TSOIL = SANDSTONE;
     private Random hillseed = null;
@@ -55,6 +55,8 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
     };
     
+	
+	
     public ItemStack[] items = {
             new ItemStack(Material.GOLDEN_APPLE),
             new ItemStack(Material.APPLE),
@@ -175,12 +177,17 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                if((random.nextInt(this.T_CHANCE)  < 2)){hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(),2);}
                if((random.nextInt(this.T_CHANCE)  < 2)){hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(),2);}
                if((random.nextInt(this.T_CHANCE)  < 2)){hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(),2);}
-               if((random.nextInt(this.T_CHANCE)  < 2)){hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(),2);}
+               if((random.nextInt(this.T_CHANCE)  < 2)){hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(),2);}
                
            }else if(hasDungeon.get(source)==2){
                int height = (D_HEIGHT);
                String type = "treasure";
                createLinkedFortress(source, height, this.BRICK, random, type);
+               hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(),4);
+               hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(),4);
+               hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(),4);
+               hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(),4);
+
            }
            
         }
@@ -188,7 +195,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
        
         
         
-        if ((random.nextInt(100) < this.FORTRESS_CHANCE)) {
+        if ((random.nextInt(300) < this.FORTRESS_CHANCE)) {
         	//31 = perfect base height
             int height = (D_HEIGHT);
             String type = "hub";
@@ -221,16 +228,47 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             
         }
         
+        
+        
+        for (int y = 41; y <= 41; y++) {
+            for (int x = 0; x <= 15; x++) {
+                for (int z = 0; z <= 15; z++) {
+                	if(source.getBlock(x, y, z).getType()==Material.NETHERRACK){
+                		if((random.nextInt(3000)  < 2)){
+                        source.getBlock(x, y, z).setType(this.LAVA);
+                	}
+                	}
+                }
+            }
+        }
+        
+        for (int y = 14; y <= 24; y++) {
+            for (int x = 0; x <= 15; x++) {
+                for (int z = 0; z <= 15; z++) {
+                	if(source.getBlock(x, y, z).getTypeId()==0){
+                    source.getBlock(x, y, z).setType(this.LAVA);
+                	}
+                }
+            }
+        }
+        
         for (int y = 255; y <= 255; y++) {
-            for (int x = 0; x <= 16; x++) {
-                for (int z = 0; z <= 16; z++) {
+            for (int x = 0; x <= 15; x++) {
+                for (int z = 0; z <= 15; z++) {
                     source.getBlock(x, y, z).setType(this.BEDROCK);
                     
                 }
             }
         }
+        
+        if(hasDungeon.size()>=this.CLEAR_CACHE){
+        hasDungeon.clear();
+        System.out.println("[TheNoom]: Cleared Chunk Cashe.");
+        }
     }
-
+    
+    
+    
     public void createCrater(Chunk source, int height, int startYN) {
 
         for (int y = height; y <= startYN + 20; y++) {
@@ -301,7 +339,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
         for (int y = height; y <= height + this.ROOM_HEIGHT; y++) {
             for (int x = 1; x <= 15; x++) {
                 for (int z = 1; z <= 15; z++) {
-
+                	
                     if ((y == height) || (y == height + this.ROOM_HEIGHT)) {
                         if ((mat == Material.BEDROCK) && ((y == height + this.ROOM_HEIGHT)) && (((z <= 9) && (x <= 9) && (z >= 7) && (x >= 7)))) {
                             source.getBlock(x, y, z).setType(this.AIR);
@@ -576,6 +614,8 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     						source.getBlock(x, y, z).setType(this.SSAND);
     					}else if ((y == height + 2)&&(((x == 1) && (z == 1)) || ((x == 1) && (z == 14)) || ((x == 14) && (z == 14)) || ((x == 14) && (z == 1)))) {
     						source.getBlock(x, y, z).setType(this.NWARTS);
+    					//}else if ((y == height + 1)&&(((x == 9) && (z == 8)) || ((x == 8) && (z == 7)) || ((x == 8) && (z == 9)) || ((x == 7) && (z == 8)))) {
+    					//	source.getBlock(x, y, z).setType(this.STAIRS);
     					} else {
     						source.getBlock(x, y, z).setType(this.AIR);
     					}

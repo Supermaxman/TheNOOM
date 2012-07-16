@@ -1,7 +1,9 @@
 package me.supermaxman.TheNoom;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,6 +14,7 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,12 +29,14 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.logging.Logger;
 import java.util.HashMap;
 import java.util.Random;
@@ -43,6 +48,10 @@ public class TheNoom extends JavaPlugin implements Listener
     PluginDescriptionFile pluginDescriptionFile;
 	static String world = "thenoom";
 	static HashMap<Player, Integer> BrokenCrystals = new HashMap<Player, Integer>();
+	
+    public Recipe recipe = new ShapelessRecipe(new ItemStack(Material.WOOD,8)).addIngredient(Material.ENDER_STONE);
+    public Recipe recipe2 = new FurnaceRecipe(new ItemStack(Material.IRON_INGOT,2), Material.ENDER_STONE);
+    
     
 	@Override
     public void onEnable(){
@@ -50,6 +59,9 @@ public class TheNoom extends JavaPlugin implements Listener
         pluginDescriptionFile = getDescription();
         log.info("[TheNoom] v" + pluginDescriptionFile.getVersion() + " enabled");
         TheNoom.plugin = this;
+        
+        getServer().addRecipe(recipe);
+        getServer().addRecipe(recipe2);        
     }
     
     @Override
@@ -68,13 +80,18 @@ public class TheNoom extends JavaPlugin implements Listener
 		Player player = event.getPlayer();
 		if (player.getWorld().getName().equalsIgnoreCase(world)){
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 5));
-			if ((player.getInventory().getHelmet()==null)||(player.getInventory().getHelmet().getType()!=Material.GOLD_HELMET)){
-				player.damage(1);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 0));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 3));
 			
+			if ((player.getInventory().getHelmet()==null)||(player.getInventory().getHelmet().getType()!=Material.GOLD_HELMET)){
+				player.damage(1, player);
+				
 			}
 		}
 	}
 	
+    
+    
     @EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamage(EntityDamageEvent event){
 		Entity e = event.getEntity();
@@ -104,8 +121,8 @@ public class TheNoom extends JavaPlugin implements Listener
 				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
 				public void run() {	
 					Location loc = event.getEntity().getLocation();
-					event.getEntity().remove();
 					event.setDroppedExp(50);
+					event.getEntity().remove();
 					loc.getBlock().setType(Material.DRAGON_EGG);
 				}
 			}, 60);
@@ -205,17 +222,96 @@ public class TheNoom extends JavaPlugin implements Listener
             					
             					
             					
+            					
+            					
+            					
+            					
+            					
+            					
+            					
+            					
             	   				if ((c!=0)&&(isRocket)){
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
-                							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
-                        					
+                							if (p!=null){
+                								p.sendMessage(ChatColor.GREEN+"[Noomston]: Lift Off In 3. . .");
                 								
+                							}
+                						}
+                					}, 20);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.sendMessage(ChatColor.GREEN+"[Noomston]: 2. . .");
                 								
-                								p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation());
+                							}
+                						}
+                					}, 40);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.sendMessage(ChatColor.GREEN+"[Noomston]: 1. . .");
+                								
+                							}
+                						}
+                					}, 60);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.sendMessage(ChatColor.GREEN+"[Noomston]: Lift Off!");
+                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
                 							}
                 						}
                 					}, 80);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                							}
+                						}
+                					}, 82);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                							}
+                						}
+                					}, 84);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                							}
+                						}
+                					}, 86);
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                    							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
+                    								TNTPrimed t = p.getServer().getWorld(world).spawn(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation(), TNTPrimed.class);
+                    								t.setFuseTicks(1);
+                    							}
+                    						}
+                						}
+                					}, 88);
+                	   				
+                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                						public void run() {	
+                							if (p!=null){
+                							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
+                        					
+                								for(Entity e: p.getNearbyEntities(0, 1, 0)){
+                    								e.teleport(e.getServer().getWorld(world).getBlockAt(e.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(e.getServer().getWorld(world),e.getLocation().getBlockX()^4,e.getLocation().getBlockZ()^4 ), e.getLocation().getBlockZ()^4).getLocation());
+                								}
+                								p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation());
+                								
+                								
+                								p.sendMessage(ChatColor.RED+"[Noomston]: CRASHDOWN!!!");
+                							}
+                							}
+                						}
+                					}, 90);
             	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
             						public void run() {	
             							
