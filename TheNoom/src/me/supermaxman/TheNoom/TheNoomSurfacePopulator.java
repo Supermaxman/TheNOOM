@@ -10,6 +10,8 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.NPC;
+import org.bukkit.entity.Villager;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
@@ -41,10 +43,17 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     public Material STAIRS = Material.NETHER_BRICK_STAIRS;
     public Material SPAWNER = Material.MOB_SPAWNER;
     public Material CHEST = Material.CHEST;
+    public Material WORKBENCH = Material.WORKBENCH;
+    public Material FURNACE = Material.FURNACE;
     public Material NWARTS = Material.NETHER_WARTS;
     public Material OBSIDIAN = Material.OBSIDIAN;
     public Material FENCE = Material.NETHER_FENCE;
     public Material LAVA = Material.LAVA;
+    public Material RSHROOM = Material.RED_MUSHROOM;
+    public Material BSHROOM = Material.BROWN_MUSHROOM;
+    public Material RTORCH = Material.REDSTONE_TORCH_ON;
+    public Material RLAMP = Material.REDSTONE_LAMP_ON;
+    public Material IBARS = Material.IRON_FENCE;
     public Material CMATERIAL = SSAND;
     public Material TSOIL = SANDSTONE;
     private Random hillseed = null;
@@ -211,6 +220,10 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             
         }
         
+        if ((source.getBlock(0, 68, 0).getTypeId()==0)&&
+        	(source.getBlock(15, 68, 15).getTypeId()==0)&&	
+        	(source.getBlock(0, 68, 15).getTypeId()==0)&&	
+        	(source.getBlock(15, 68, 0).getTypeId()==0)){
         if ((random.nextInt(200) < this.CRATER_CHANCE)) {
 
             int height = startYN - 2;
@@ -220,6 +233,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                 createFortress(source, 54, this.BEDROCK, random);
             }
         }
+        }
         if ((random.nextInt(400)  < this.TOWER_CHANCE)) {
             int roomsLeft = random.nextInt(6) + 4;
             int size = 10;
@@ -227,6 +241,46 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             createTower(source, height, size, roomsLeft, this.OBSIDIAN, random);
             
         }
+        
+        if ((random.nextInt(50)  < 2)) {
+        	
+            int height = source.getChunkSnapshot().getHighestBlockYAt(8, 8);
+            
+            int floor = source.getChunkSnapshot().getHighestBlockYAt(8, 8);
+            
+            floor=floor+2;
+            
+            String type = "house";
+            createVillage(source, height, floor, random, type);
+            
+        }
+        
+        
+        
+        
+        
+        
+        if ((random.nextInt(10)  < 2)) {
+            for (int y = 1; y <= 35; y++) {
+                for (int x = 0; x <= 15; x++) {
+                    for (int z = 0; z <= 15; z++) {
+                    	if(source.getBlock(x, y, z).getType()==Material.AIR){
+                        	if(source.getBlock(x, y-1, z).getType()==Material.NETHERRACK){
+                                if ((random.nextInt(30)  < 2)) {
+
+                    		if((random.nextInt(2)  < 1)){
+                    			source.getBlock(x, y, z).setType(this.RSHROOM);
+                    		}else{
+                                source.getBlock(x, y, z).setType(this.BSHROOM);
+                    		}
+                           }
+                    	}
+                    }
+                    }
+                }
+            }
+        }
+        
         
         
         
@@ -675,6 +729,111 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     }
     
     
+    public void createVillage(Chunk source, int height, int floor, Random random, String type){
+    	if (type.equalsIgnoreCase("house")){
+    		for (int y = height-40; y <= floor + 4; y++) {
+    			for (int x = 2; x <= 13; x++) {
+    				for (int z = 4; z <= 11; z++) {
+    					 if(((y == floor-1))&&((x == 3 || x == 14 || x == 1 || x == 12)&&(z == 4 || z == 11))) {
+     						if (source.getBlock(x, y, z).getTypeId()==0){
+
+                             source.getBlock(x, y, z).setType(this.FENCE);
+     						}
+     					} else if(((y == floor-1))&&((x == 2 || x == 13)&&(z == 5 || z == 12 || z == 3 || z == 10))) {
+     						if (source.getBlock(x, y, z).getTypeId()==0){
+
+                                source.getBlock(x, y, z).setType(this.FENCE);
+        					}
+     					} else if ((y < floor)&&((x == 2 || x == 13)&&(z == 4 || z == 11))) {
+    						if (source.getBlock(x, y, z).getTypeId()==0){
+    							if(source.getBlock(x, y, z).getLocation().getY()>65){
+    								source.getBlock(x, y, z).setType(this.FENCE);
+    							}
+    						}
+    						
+                        } else if ((y == floor &&((z == 4) || (z == 11) || (x == 2) || (x == 13)))||((y == floor+4) &&((z != 4) && (z != 11)))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.OBSIDIAN);
+                            
+    					} else if(((y == floor+1)||(y == floor+2)||(y == floor+3))&&((x == 2 || x == 13)&&(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.OBSIDIAN);
+                            
+    					} else if(((y == floor+1))&&((x == 3 || x == 14 || x == 1 || x == 12)&&(z == 5 || z == 12 || z == 3 || z == 10))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.OBSIDIAN);
+                              
+    					} else if(((y == floor+2))&&((x == 3 || x == 14 || x == 1 || x == 12)&&(z == 5 || z == 12 || z == 3 || z == 10))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.RTORCH);
+                            
+    					} else if(((y == floor+3))&&((x == 3 || x == 14 || x == 1 || x == 12)&&(z == 5 || z == 12 || z == 3 || z == 10))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.RLAMP);
+                            
+    					} else if(((y == floor+3))&&((x == 3 || x == 14 || x == 1 || x == 12)&&(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.OBSIDIAN);
+                            
+    					} else if(((y == floor+3))&&((x == 2 || x == 13)&&(z == 5 || z == 12 || z == 3 || z == 10))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.OBSIDIAN);
+                            
+    					} else if (((y == floor) &&((z != 4) && (z != 11)&& (x != 2)&& (x != 13)))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.BRICK);
+                            
+    					} else if(((y == floor+1))&&((x == 2)&&(z == 7 || z == 8))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.AIR);
+                            
+    					} else if(((y == floor+2))&&((x == 2)&&(z == 7 || z == 8))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.AIR);
+                            
+    					} else if(((y == floor+2))&&((x == 4 || x == 6 || x == 9 || x == 11)&&(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.IBARS);
+                            
+    					} else if(((y == floor+1))&&((x == 12)&&(z == 6 || z == 9))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.FURNACE);
+                            
+    					} else if(((y == floor+1))&&((x == 12)&&(z == 7))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.WORKBENCH);
+                            
+    					} else if(((y == floor+1))&&((x == 12)&&(z == 8))) {
+                        	
+    						//add item gen
+                            source.getBlock(x, y, z).setType(this.CHEST);
+                            
+                            
+                            
+    					} else if(((y == floor+1))&&((x == 2 || x == 13)||(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.BRICK);
+                            
+    					} else if(((y == floor+2))&&((x == 2 || x == 13)||(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.BRICK);
+                          
+    					} else if(((y == floor+3))&&((x == 2 || x == 13)||(z == 4 || z == 11))) {
+                        	
+                            source.getBlock(x, y, z).setType(this.BRICK);
+                            
+    					}else if ((y > floor)) {
+    						
+    						source.getBlock(x, y, z).setType(this.AIR);
+    						
+    					}
+    					
+    				}
+    			}	
+    		}
+    	}
+	
+    }
 }
 
 
