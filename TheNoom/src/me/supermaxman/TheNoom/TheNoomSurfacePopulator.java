@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.NPC;
@@ -54,12 +55,14 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     public Material RTORCH = Material.REDSTONE_TORCH_ON;
     public Material RLAMP = Material.REDSTONE_LAMP_ON;
     public Material IBARS = Material.IRON_FENCE;
+    public Material WATER = Material.WATER;
     public Material CMATERIAL = SSAND;
     public Material TSOIL = SANDSTONE;
     private Random hillseed = null;
     private SimplexOctaveGenerator gen = null;
 	public HashMap<Chunk, Integer> hasDungeon = new HashMap<Chunk, Integer>();
-	
+	static HashMap<Chunk, Integer> spaceShip = new HashMap<Chunk, Integer>();
+
 	public BlockFace[] directions = {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
     };
@@ -242,7 +245,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             
         }
         
-        if ((random.nextInt(50)  < 2)) {
+        if ((random.nextInt(300)  < 2)) {
         	
             int height = source.getChunkSnapshot().getHighestBlockYAt(8, 8);
             
@@ -254,7 +257,20 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             createVillage(source, height, floor, random, type);
             
         }
-        
+        if ((source.getBlock(0, 68, 0).getTypeId()==0)&&
+            	(source.getBlock(15, 68, 15).getTypeId()==0)&&	
+            	(source.getBlock(0, 68, 15).getTypeId()==0)&&	
+            	(source.getBlock(15, 68, 0).getTypeId()==0)){
+        if ((random.nextInt(50)  < 2)) {
+        	
+            int height = 200;
+            int floor = source.getChunkSnapshot().getHighestBlockYAt(8, 8);
+            
+            String type = "ship1";
+            spaceShip.put(source, 1);
+            createSpaceShip(source, height, floor, this.OBSIDIAN, random, type);
+        }
+        }
         
         
         
@@ -825,7 +841,15 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     					}else if ((y > floor)) {
     						
     						source.getBlock(x, y, z).setType(this.AIR);
-    						
+    						if((y==floor+1)){
+    							Block b = source.getBlock(x, y, z);
+    	                        //add crystal
+    							 if(((x == 6)&&(z == 7 || z == 8))) {
+    								 
+    								 b.getWorld().spawn(b.getLocation(), Villager.class);
+    		                            
+    		    				}
+    						}
     					}
     					
     				}
@@ -834,8 +858,101 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     	}
 	
     }
+
+    
+    public void createSpaceShip(Chunk source, int height, int floor, Material mat, Random random, String type){
+    	if (type.equalsIgnoreCase("ship1")){
+    		for (int y = floor-2; y <= height + 8; y++) {
+    			for (int x = 0; x <= 15; x++) {
+    				for (int z = 0; z <= 15; z++) {
+    					
+    					if (((y == height) || (y == height + 8))&&((z <= 13) && (x <= 13) && (z >= 2) && (x >= 2))) {
+    						if(y==height&&(x==8 && z == 8)){
+    							source.getBlock(x, y, z).setType(Material.STATIONARY_WATER); 
+    						}else if(y==height&&((z <= 9) && (x <= 9) && (z >= 7) && (x >= 7))) {
+    							source.getBlock(x, y, z).setType(this.WATER); 
+    						}else if((x == 6 || x == 10)&&(z == 6 || z == 10)){
+                        		source.getBlock(x, y, z).setType(this.GSTONE);
+                        	}else{
+        						source.getBlock(x, y, z).setType(mat); 
+    						}
+                        } else if (((y == height+1) || (y == height + 7))) {
+                        	if((y==height+1)&&(x == 2 || x == 13)&&(z == 2 || z == 13)){
+                        		Block b = source.getBlock(x, y, z);
+                        		b.setType(this.SPAWNER);
+                                CreatureSpawner spawner = (CreatureSpawner) b.getState();
+                                spawner.setSpawnedType(EntityType.PIG_ZOMBIE);
+                        	}else if((y==height+7)&&(x == 2 || x == 13)&&(z == 2 || z == 13)){
+                        		source.getBlock(x, y, z).setType(this.GSTONE);
+                        	}else if ((z == 1) || (z == 14) || (x == 1) || (x == 14)) {
+                                source.getBlock(x, y, z).setType(mat);
+                            } else {
+                                source.getBlock(x, y, z).setType(this.AIR);
+                            }
+                        } else if (((y >= height+2) && (y <= height + 6))) {
+                        	if((y==height+2||y==height+6)&&(x == 0 || x == 15)&&(z == 0 || z == 15)){
+                       	 		source.getBlock(x, y, z).setType(this.GSTONE);
+                        	}else if ((z == 0) || (z == 15) || (x == 0) || (x == 15)) {
+                       	 		source.getBlock(x, y, z).setType(mat);
+                       	 	} else {
+                       	 		source.getBlock(x, y, z).setType(this.AIR);
+                       	 	}
+                        } else if ((y < height)) {
+                        	if(x==8 && z == 8){
+                        		source.getBlock(x, y, z).setType(this.WATER);
+                        	}else if(y<=floor&&((z <= 9) && (x <= 9) && (z >= 7) && (x >= 7))){
+        						source.getBlock(x, y, z).setType(this.AIR);
+                        	}
+    					} else if ((y > height)&&(y < height + 8)) {
+    						source.getBlock(x, y, z).setType(this.AIR);
+    					}
+    					
+    					
+    				}
+    			}	
+    		}
+    	}
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
-
-
-
-

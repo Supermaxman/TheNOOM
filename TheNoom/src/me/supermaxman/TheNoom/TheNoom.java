@@ -53,6 +53,7 @@ public class TheNoom extends JavaPlugin implements Listener
     public Recipe recipe2 = new FurnaceRecipe(new ItemStack(Material.IRON_INGOT,2), Material.ENDER_STONE);
     
     
+    
 	@Override
     public void onEnable(){
         getServer().getPluginManager().registerEvents(new TheNoom(), this);
@@ -87,6 +88,12 @@ public class TheNoom extends JavaPlugin implements Listener
 				player.damage(1, player);
 				
 			}
+			//if(TheNoomSurfacePopulator.spaceShip.containsKey(player.getLocation().getChunk())){
+				if(player.getLocation().add(0, 1, 0).getBlock().getType()==Material.STATIONARY_WATER){
+				player.setVelocity(player.getVelocity().setY(1));
+				}
+				
+			//}
 		}
 	}
 	
