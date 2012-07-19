@@ -62,7 +62,11 @@ public class TheNoom extends JavaPlugin implements Listener
         TheNoom.plugin = this;
         
         getServer().addRecipe(recipe);
-        getServer().addRecipe(recipe2);        
+        getServer().addRecipe(recipe2);      
+        
+        
+        
+        
     }
     
     @Override
@@ -82,18 +86,12 @@ public class TheNoom extends JavaPlugin implements Listener
 		if (player.getWorld().getName().equalsIgnoreCase(world)){
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 5));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 0));
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 200, 3));
 			
 			if ((player.getInventory().getHelmet()==null)||(player.getInventory().getHelmet().getType()!=Material.GOLD_HELMET)){
-				player.damage(1, player);
+				player.damage(1);
 				
 			}
-			//if(TheNoomSurfacePopulator.spaceShip.containsKey(player.getLocation().getChunk())){
-				if(player.getLocation().add(0, 1, 0).getBlock().getType()==Material.STATIONARY_WATER){
-				player.setVelocity(player.getVelocity().setY(1));
-				}
-				
-			//}
+			
 		}
 	}
 	
@@ -194,7 +192,7 @@ public class TheNoom extends JavaPlugin implements Listener
 			}
 		}
 	}
-
+    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event){
     	final Player p = event.getPlayer();
@@ -266,39 +264,40 @@ public class TheNoom extends JavaPlugin implements Listener
                 						public void run() {	
                 							if (p!=null){
                 								p.sendMessage(ChatColor.GREEN+"[Noomston]: Lift Off!");
-                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                 							}
                 						}
                 					}, 80);
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
-                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                 							}
                 						}
                 					}, 82);
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
-                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                 							}
                 						}
                 					}, 84);
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
-                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
+                								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
+                    							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
+                    								TNTPrimed t = p.getServer().getWorld(world).spawn(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation(), TNTPrimed.class);
+                    								t.setFuseTicks(1);
+                    							}
                 							}
                 						}
                 					}, 86);
                 	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
-                								p.getWorld().playEffect(p.getLocation(), Effect.ZOMBIE_DESTROY_DOOR, 0);
-                    							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
-                    								TNTPrimed t = p.getServer().getWorld(world).spawn(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX()^4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world),p.getLocation().getBlockX()^4,p.getLocation().getBlockZ()^4 ), p.getLocation().getBlockZ()^4).getLocation(), TNTPrimed.class);
-                    								t.setFuseTicks(1);
-                    							}
+                								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
+                								
                     						}
                 						}
                 					}, 88);

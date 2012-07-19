@@ -8,10 +8,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.NPC;
 import org.bukkit.entity.Villager;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.inventory.ItemStack;
@@ -86,6 +85,17 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             new ItemStack(Material.NETHER_WARTS, 6),
             new ItemStack(Material.NETHER_WARTS, 1)
     };
+    public ItemStack[] vitems = {
+            new ItemStack(Material.APPLE),
+            new ItemStack(Material.APPLE),
+            new ItemStack(Material.APPLE),
+            new ItemStack(Material.IRON_SWORD),
+            new ItemStack(Material.GOLD_HELMET),
+            new ItemStack(Material.BREAD, 3),
+            new ItemStack(Material.BREAD, 2),
+            new ItemStack(Material.BREAD, 1),
+            new ItemStack(Material.DIAMOND, 1)
+    };
     
     public ItemStack[] ditems = {
             new ItemStack(Material.GOLDEN_APPLE),
@@ -98,6 +108,14 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             new ItemStack(Material.BREAD, 6),
             new ItemStack(Material.DIAMOND, 1)
     };
+    
+    public Enchantment[] ench = {
+    		Enchantment.ARROW_DAMAGE,
+    		Enchantment.ARROW_FIRE,
+    		Enchantment.ARROW_INFINITE,
+    		Enchantment.ARROW_KNOCKBACK
+    };
+    
     
     public void populate(World world, Random random, Chunk source) {
         random.setSeed(System.nanoTime());
@@ -261,7 +279,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             	(source.getBlock(15, 68, 15).getTypeId()==0)&&	
             	(source.getBlock(0, 68, 15).getTypeId()==0)&&	
             	(source.getBlock(15, 68, 0).getTypeId()==0)){
-        if ((random.nextInt(50)  < 2)) {
+        if ((random.nextInt(300)  < 2)) {
         	
             int height = 200;
             int floor = source.getChunkSnapshot().getHighestBlockYAt(8, 8);
@@ -822,8 +840,12 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
     					} else if(((y == floor+1))&&((x == 12)&&(z == 8))) {
                         	
     						//add item gen
-                            source.getBlock(x, y, z).setType(this.CHEST);
-                            
+    						Block b = source.getBlock(x, y, z);
+                            b.setType(this.CHEST);
+                            ((Chest) b.getState()).getBlockInventory().setItem(((Chest) b.getState()).getBlockInventory().firstEmpty(), vitems[random.nextInt(vitems.length)]);
+                            while(random.nextInt(3)>1){
+                            ((Chest) b.getState()).getBlockInventory().setItem(((Chest) b.getState()).getBlockInventory().firstEmpty(), vitems[random.nextInt(vitems.length)]);
+                            }
                             
                             
     					} else if(((y == floor+1))&&((x == 2 || x == 13)||(z == 4 || z == 11))) {
@@ -886,7 +908,25 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                         		source.getBlock(x, y, z).setType(this.GSTONE);
                         	}else if ((z == 1) || (z == 14) || (x == 1) || (x == 14)) {
                                 source.getBlock(x, y, z).setType(mat);
-                            } else {
+                            } else if ((y == height + 7)&&((z == 8) && (x == 8))) {
+                            	//add item gen
+                            	
+                                source.getBlock(x, y, z).setType(this.CHEST);
+                                Block b = source.getBlock(x, y, z);
+                                b.setType(this.CHEST);
+                                
+                                ((Chest) b.getState()).getBlockInventory().setItem(((Chest) b.getState()).getBlockInventory().firstEmpty(), new ItemStack(Material.BOW,1));
+                                ItemStack bow = ((Chest) b.getState()).getBlockInventory().getItem(((Chest) b.getState()).getBlockInventory().first(Material.BOW));
+                                
+                                int s = random.nextInt(2);
+                                bow.addEnchantment(ench[random.nextInt(ench.length)], 1);
+                                while(s<2){
+                                    bow.addEnchantment(ench[random.nextInt(ench.length)], 1);
+                                    s++;
+                                }
+                                
+                                
+                            }else {
                                 source.getBlock(x, y, z).setType(this.AIR);
                             }
                         } else if (((y >= height+2) && (y <= height + 6))) {
@@ -953,6 +993,8 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
 
 
 
+
+    
 
 
 }
