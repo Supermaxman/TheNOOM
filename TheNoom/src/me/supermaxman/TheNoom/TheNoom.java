@@ -32,6 +32,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +52,7 @@ public class TheNoom extends JavaPlugin implements Listener
 	
     public Recipe recipe = new ShapelessRecipe(new ItemStack(Material.WOOD,8)).addIngredient(Material.ENDER_STONE);
     public Recipe recipe2 = new FurnaceRecipe(new ItemStack(Material.IRON_INGOT,2), Material.ENDER_STONE);
+    public Recipe recipe3 = new ShapedRecipe(new ItemStack(Material.ENDER_PORTAL_FRAME,1)).shape("eee","ede","eee").setIngredient('e', Material.ENDER_STONE).setIngredient('d', Material.DIAMOND);
     
     
     
@@ -63,12 +65,13 @@ public class TheNoom extends JavaPlugin implements Listener
         
         getServer().addRecipe(recipe);
         getServer().addRecipe(recipe2);      
-        
-        
-        
+        //getServer().addRecipe(recipe3);      
         
     }
-    
+	
+	
+	
+	
     @Override
     public void onDisable(){
         log.info("[TheNoom] v" + pluginDescriptionFile.getVersion() +" disabled");
@@ -83,6 +86,7 @@ public class TheNoom extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent event){
 		Player player = event.getPlayer();
+		
 		if (player.getWorld().getName().equalsIgnoreCase(world)){
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 5));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 0));
@@ -114,6 +118,7 @@ public class TheNoom extends JavaPlugin implements Listener
 				if (e instanceof PigZombie){
 					if ((new Random().nextInt(3) < 2)) {
 					event.setCancelled(true);
+					
 					}
 				}
 				
@@ -133,7 +138,7 @@ public class TheNoom extends JavaPlugin implements Listener
 			}, 60);
 		}
 	}
-
+	
     @EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityExplode(EntityExplodeEvent event){
 		Entity e = event.getEntity();
@@ -384,7 +389,7 @@ public class TheNoom extends JavaPlugin implements Listener
         		event.setCancelled(true);
     			p.getInventory().setItem(p.getInventory().firstEmpty(), new ItemStack(Material.DRAGON_EGG,1));
     			event.getClickedBlock().setTypeId(0);
-    			}
+    	    	}
     		}
     	}
     		
