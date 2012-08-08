@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -117,7 +118,8 @@ public class TheNoom extends JavaPlugin implements Listener
 			if (e.getWorld().getName().equalsIgnoreCase(world)){
 				if (e instanceof PigZombie){
 					if ((new Random().nextInt(3) < 2)) {
-					event.setCancelled(true);
+						e.getWorld().spawnCreature(e.getLocation(), EntityType.ENDERMAN);
+						event.setCancelled(true);
 					
 					}
 				}
