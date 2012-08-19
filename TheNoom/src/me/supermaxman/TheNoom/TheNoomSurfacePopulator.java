@@ -166,6 +166,7 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             hillseed = new Random(source.getWorld().getSeed());
             gen = new SimplexOctaveGenerator(hillseed, 8);
         }
+
         double chunkX = source.getX();
         double chunkZ = source.getZ();
         gen.setScale(1 / 64.0);
@@ -197,40 +198,42 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
                 int height = (D_HEIGHT);
                 String type = "spawner";
                 createLinkedFortress(source, height, this.BRICK, random, type);
-                if ((!(hasDungeon.containsKey((source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(), 0);
+                Block b = source.getBlock(0, 1, 0);
+                if ((!(hasDungeon.containsKey((b.getLocation().add(20, 0, 0).getChunk()))))&&((random.nextInt(this.S_CHANCE) < 2))){
+                    hasDungeon.put(b.getLocation().add(20, 0, 0).getChunk(), 0);
                 }
-                if ((!(hasDungeon.containsKey((source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(), 0);
+                if ((!(hasDungeon.containsKey((b.getLocation().add(0, 0, 20).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
+                    hasDungeon.put(b.getLocation().add(0, 0, 20).getChunk(), 0);
                 }
-                if ((!(hasDungeon.containsKey((source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(), 0);
+                if ((!(hasDungeon.containsKey((b.getLocation().add(-10, 0, 0).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
+                    hasDungeon.put(b.getLocation().add(-10, 0, 0).getChunk(), 0);
                 }
-                if ((!(hasDungeon.containsKey((source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(), 0);
+                if ((!(hasDungeon.containsKey((b.getLocation().add(0, 0, -10).getChunk())))) && ((random.nextInt(this.S_CHANCE) < 2))) {
+                    hasDungeon.put(b.getLocation().add(0, 0, -10).getChunk(), 0);
                 }
 
                 if ((random.nextInt(this.T_CHANCE) < 2)) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(), 2);
+                    hasDungeon.put(b.getLocation().add(20, 0, 0).getChunk(), 2);
                 }
                 if ((random.nextInt(this.T_CHANCE) < 2)) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(), 2);
+                    hasDungeon.put(b.getLocation().add(0, 0, 20).getChunk(), 2);
                 }
                 if ((random.nextInt(this.T_CHANCE) < 2)) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(), 2);
+                    hasDungeon.put(b.getLocation().add(-10, 0, 0).getChunk(), 2);
                 }
                 if ((random.nextInt(this.T_CHANCE) < 2)) {
-                    hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(), 2);
+                    hasDungeon.put(b.getLocation().add(0, 0, -10).getChunk(), 2);
                 }
 
             } else if (hasDungeon.get(source) == 2) {
                 int height = (D_HEIGHT);
                 String type = "treasure";
                 createLinkedFortress(source, height, this.BRICK, random, type);
-                hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(), 4);
-                hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(), 4);
-                hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(), 4);
-                hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(), 4);
+                Block b = source.getBlock(0, 1, 0);
+                hasDungeon.put(b.getLocation().add(20, 0, 0).getChunk(), 4);
+                hasDungeon.put(b.getLocation().add(0, 0, 20).getChunk(), 4);
+                hasDungeon.put(b.getLocation().add(-10, 0, 0).getChunk(), 4);
+                hasDungeon.put(b.getLocation().add(0, 0, -10).getChunk(), 4);
 
             }
 
@@ -242,11 +245,11 @@ public class TheNoomSurfacePopulator extends BlockPopulator {
             int height = (D_HEIGHT);
             String type = "hub";
             createLinkedFortress(source, height, this.BRICK, random, type);
-
-            hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(20, 0, 0).getChunk(), 0);
-            hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, 20).getChunk(), 0);
-            hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(-10, 0, 0).getChunk(), 0);
-            hasDungeon.put(source.getBlock(0, 1, 0).getLocation().add(0, 0, -10).getChunk(), 0);
+            Block b = source.getBlock(0, 1, 0);
+            hasDungeon.put(b.getLocation().add(20, 0, 0).getChunk(), 0);
+            hasDungeon.put(b.getLocation().add(0, 0, 20).getChunk(), 0);
+            hasDungeon.put(b.getLocation().add(-10, 0, 0).getChunk(), 0);
+            hasDungeon.put(b.getLocation().add(0, 0, -10).getChunk(), 0);
 
             hasDungeon.put(source, 1);
 
