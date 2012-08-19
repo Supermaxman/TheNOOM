@@ -298,7 +298,7 @@ public class TheNoom extends JavaPlugin implements Listener {
                                         if (p != null) {
                                             p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                                             if ((p.getLocation().getBlockX() == b.getLocation().getBlockX()) && (p.getLocation().getBlockY() == b.getLocation().getBlockY()) && (p.getLocation().getBlockZ() == b.getLocation().getBlockZ())) {
-                                                TNTPrimed t = p.getServer().getWorld(world).spawn(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX() ^ 4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world), p.getLocation().getBlockX() ^ 4, p.getLocation().getBlockZ() ^ 4), p.getLocation().getBlockZ() ^ 4).getLocation(), TNTPrimed.class);
+                                                TNTPrimed t = p.getServer().getWorld(world).spawn(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX() / 4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world), p.getLocation().getBlockX() / 4, p.getLocation().getBlockZ() / 4), p.getLocation().getBlockZ() / 4).getLocation(), TNTPrimed.class);
                                                 t.setFuseTicks(1);
                                             }
                                         }
@@ -319,9 +319,9 @@ public class TheNoom extends JavaPlugin implements Listener {
                                             if ((p.getLocation().getBlockX() == b.getLocation().getBlockX()) && (p.getLocation().getBlockY() == b.getLocation().getBlockY()) && (p.getLocation().getBlockZ() == b.getLocation().getBlockZ())) {
 
                                                 for (Entity e : p.getNearbyEntities(0, 1, 0)) {
-                                                    e.teleport(e.getServer().getWorld(world).getBlockAt(e.getLocation().getBlockX() ^ 4, heighestBlockAtIgnoreRoof(e.getServer().getWorld(world), e.getLocation().getBlockX() ^ 4, e.getLocation().getBlockZ() ^ 4), e.getLocation().getBlockZ() ^ 4).getLocation());
+                                                    e.teleport(e.getServer().getWorld(world).getBlockAt(e.getLocation().getBlockX() / 4, heighestBlockAtIgnoreRoof(e.getServer().getWorld(world), e.getLocation().getBlockX() / 4, e.getLocation().getBlockZ() / 4), e.getLocation().getBlockZ() / 4).getLocation());
                                                 }
-                                                p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX() ^ 4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world), p.getLocation().getBlockX() ^ 4, p.getLocation().getBlockZ() ^ 4), p.getLocation().getBlockZ() ^ 4).getLocation());
+                                                p.teleport(p.getServer().getWorld(world).getBlockAt(p.getLocation().getBlockX() / 4, heighestBlockAtIgnoreRoof(p.getServer().getWorld(world), p.getLocation().getBlockX() / 4, p.getLocation().getBlockZ() / 4), p.getLocation().getBlockZ() / 4).getLocation());
 
 
                                                 p.sendMessage(ChatColor.RED + "[Noomston]: CRASHDOWN!!!");
