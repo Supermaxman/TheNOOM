@@ -130,7 +130,7 @@ public class TheNoom extends JavaPlugin implements Listener
 	@EventHandler
 	public void onEntityDeath(final EntityDeathEvent event) {
 		if(event.getEntity() instanceof EnderDragon){
-				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
 				public void run() {	
 					Location loc = event.getEntity().getLocation();
 					event.setDroppedExp(50);
@@ -236,14 +236,8 @@ public class TheNoom extends JavaPlugin implements Listener
             					
             					
             					
-            					
-            					
-            					
-            					
-            					
-            					
             	   				if ((c!=0)&&(isRocket)){
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.sendMessage(ChatColor.GREEN+"[Noomston]: Lift Off In 3. . .");
@@ -251,7 +245,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 20);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.sendMessage(ChatColor.GREEN+"[Noomston]: 2. . .");
@@ -259,7 +253,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 40);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.sendMessage(ChatColor.GREEN+"[Noomston]: 1. . .");
@@ -267,7 +261,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 60);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.sendMessage(ChatColor.GREEN+"[Noomston]: Lift Off!");
@@ -275,21 +269,21 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 80);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                 							}
                 						}
                 					}, 82);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
                 							}
                 						}
                 					}, 84);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
@@ -300,7 +294,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 86);
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 								p.getWorld().playEffect(p.getLocation(), Effect.EXTINGUISH, 0);
@@ -309,7 +303,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 						}
                 					}, 88);
                 	   				
-                	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+                	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
                 						public void run() {	
                 							if (p!=null){
                 							if ((p.getLocation().getBlockX()==b.getLocation().getBlockX())&&(p.getLocation().getBlockY()==b.getLocation().getBlockY())&&(p.getLocation().getBlockZ()==b.getLocation().getBlockZ())){
@@ -325,7 +319,7 @@ public class TheNoom extends JavaPlugin implements Listener
                 							}
                 						}
                 					}, 90);
-            	   				Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){ 
+            	   				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
             						public void run() {	
             							
             									if (c==1){
